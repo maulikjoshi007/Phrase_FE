@@ -2,20 +2,37 @@
 
 import React, { useEffect } from 'react'
 import { useState } from 'react';
-import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Container, Typography, ListItemText, Paper, TableContainer, InputBase, IconButton, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { TextField, Button, Table, TableBody, TableCell, TableHead, TableRow, Container, Typography, ListItemText, Paper, TableContainer, InputBase, IconButton, FormControl, InputLabel, Select, MenuItem, Menu } from '@mui/material';
 import { datalist } from './modal';
 import './table.scss'
 import SearchIcon from '@mui/icons-material/Search';
+import {useRouter} from 'next/navigation'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const Listpage = () => {
   const [query, setQuery] = useState('');
   const [phrases, setPhrases] = useState<datalist[]>([]);
   const [filter, setFilter] = useState<any>();
-  const [status, setStatus] = useState('')
-  useEffect(() => {
-    searchPhrases()
-    // datalist
-  }, [])
+ 
+  
+  const router = useRouter();
+  const handleDetail = (id:number, company:any) => {
+    router.push(`/employer/employer-details?id=${id}&companyID=${company}`);
+  };
+  const [actionGroup, setActionGroup] = useState();
+  const [actionanchorEl, setactionAnchorEl] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [activeGroup,setActiveGroup]=useState<any>()
+  const open = Boolean(anchorEl);
+  const actionopen = Boolean(actionanchorEl);
+  const handleactionClick = (event:any) => {
+    setactionAnchorEl(event.currentTarget);
+    setActiveGroup("")
+    // setActionGroup(group); // Store the group data for the clicked item
+  };
+  const handleactionClose = () => {
+    setactionAnchorEl(null);
+  };
 
   const datalist = {
     id: 1,
@@ -51,9 +68,13 @@ const Listpage = () => {
       setFilter(null);
     }
   };
-  const handleStatusChange = (event: any) => {
-    setStatus(event.target.value);
-  };
+
+  const viewphrase = () => {
+    console.log("okkk");
+    router.push('/phrase-details')
+   
+    
+  }
 
   return (
     <div>
@@ -75,16 +96,7 @@ const Listpage = () => {
               onChange={handleFilterInput}
             />
           </div>
-          <FormControl variant="outlined" style={{ minWidth: 150 }}>
-            <InputLabel>Status</InputLabel>
-            <Select value={status} onChange={handleStatusChange} label="Status">
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
-              <MenuItem value="EN">English</MenuItem>
-              <MenuItem value="NR">Netherland</MenuItem>
-            </Select>
-          </FormControl>
+        
         </div>
 
         <Paper className="table-section">
@@ -105,7 +117,8 @@ const Listpage = () => {
                     </ListItemText>
                   </TableCell>
                   <TableCell className="table-th">
-                    <ListItemText className="item-title">updated date</ListItemText>
+                    <ListItemText className="item-title">
+                    </ListItemText>
                   </TableCell>
                 </TableRow>
               </TableHead>
@@ -121,8 +134,52 @@ const Listpage = () => {
                   <TableCell>{datalist.id}</TableCell>
                   <TableCell>{datalist.phrase}</TableCell>
                   <TableCell>{datalist.status}</TableCell>
-                  <TableCell>{formatDate(datalist.createdAt)}</TableCell>
                   <TableCell>{formatDate(datalist.updatedAt)}</TableCell>
+                  <TableCell className="table-td">
+                      <IconButton
+                        onClick={(event) => {
+                          handleactionClick(event);
+                        }}
+                        size="small"
+                        sx={{ ml: 2 }}
+                        aria-controls={open ? "account-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? "true" : undefined}
+                      >
+                        <MoreHorizIcon/>
+                      </IconButton>
+                      <Menu
+                        anchorEl={actionanchorEl}
+                        className="dropdown"
+                        id="account-menu"
+                        open={actionopen}
+                        onClose={handleactionClose}
+                        PaperProps={{
+                          elevation: 0,
+                        }}
+                        transformOrigin={{
+                          horizontal: "right",
+                          vertical: "top",
+                        }}
+                        anchorOrigin={{
+                          horizontal: "right",
+                          vertical: "bottom",
+                        }}
+                      >
+                        <MenuItem
+                          // onClick={() =>
+                          //   handleDetail(
+                          //     // datalist.id,datalist.id
+                          //     // actionGroup.uuid,
+                          //     // actionGroup.company_uuid
+                          //   )
+                          // }
+                          onClick={viewphrase}
+                        >
+                          View
+                        </MenuItem>
+                      </Menu>
+                    </TableCell>
                 </TableRow>
               </TableBody>
             </Table>

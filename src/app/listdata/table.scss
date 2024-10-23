@@ -1,0 +1,89 @@
+.table-section {
+    width: 100%;
+    overflow: hidden;
+    // border-radius: 0.5rem;
+    // border: 0.06rem solid #e3e3e8;
+    border-top: none;
+    box-shadow: unset !important;
+    .table-container {
+      border: 0.06rem solid #e3e3e8;
+      max-height: calc(100vh - 18.4rem);
+      border-radius: 0.5rem;
+      .table {
+        .table-head {
+          .table-tr {
+            .table-th {
+              background-color: #141414;
+              padding: 0.813rem;
+              &:first-child {
+                padding-left: 2rem;
+              }
+              .item-title {
+                flex: unset;
+                span {
+                  color: #fcfcfc;
+                  font-size: 1rem;
+                  font-style: normal;
+                  font-weight: 600;
+                  line-height: normal;
+                  white-space: nowrap;
+                }
+              }
+            }
+          }
+        }
+        .table-body {
+          .table-tr {
+            .table-td {
+              border-bottom: 0.06rem solid #e3e3e8;
+              color: #141414;
+              font-size: 0.9rem;
+              font-style: normal;
+              font-weight: 400;
+              line-height: normal;
+              padding: 0.813rem;
+              white-space: nowrap;
+
+              .status-btn {
+                font-size: 0.8rem;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                box-shadow: unset;
+                padding: 0.313rem 0.625rem;
+                border-radius: 0.3rem;
+                text-transform: capitalize;
+               
+              }
+             
+              
+            }
+          }
+        }
+      }
+    }
+  }
+  .top-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0.8rem 0rem 1.8rem;
+    .search-box {
+      width: 20%;
+      border-radius: 0.5rem;
+      border: 0.06rem solid #e3e3e8;
+      padding: 0.2rem;
+      display: flex;
+      div {
+        width: 100%;
+      }
+      .custom-input {
+        width: 93%;
+        padding-right: 0.5rem;
+      }
+    }
+    .btn-section {
+      display: flex;
+      align-items: center;
+    }
+  }

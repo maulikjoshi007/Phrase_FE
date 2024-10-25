@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, ListItemText, Paper, TableContainer, InputBase, IconButton, TableFooter, TablePagination, Icon } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, ListItemText, Paper, TableContainer, InputBase, IconButton, TableFooter, TablePagination, Icon, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import { datalist } from './modal'; // Importing the datalist interface
 import './table.scss'; // Importing custom styles for the table
 import SearchIcon from '@mui/icons-material/Search'; // Importing the search icon
@@ -18,11 +18,12 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
   const [page, setPage] = useState(0); // State to track the current page number
   const [rowsPerPage, setRowsPerPage] = useState(2); // State to limit the number of phrases displayed per page
   const [totalPhrases, setTotalPhrases] = useState(0); // State to store the total number of phrases for pagination
+  const [selectedStatus, setSelectedStatus] = useState<any>()
 
   // Effect to fetch phrases whenever filter, page, rowsPerPage, order, or orderBy changes
   useEffect(() => {
     getphrases();
-  }, [filter, page, rowsPerPage, order, orderBy]);
+  }, [filter, page, rowsPerPage, order, orderBy, selectedStatus]);
 
   // Function to handle sorting when a column header is clicked
   const handleSort = (columnName: string) => {
@@ -62,7 +63,10 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
 
     // Append sorting parameters if available
     if (order && orderBy) {
-      url += `&sort_by=${order}&sort_column=${orderBy}`;
+      url += `&order=${order}&sort=${orderBy}`;
+    }
+    if (selectedStatus) {
+      url += `&status=${selectedStatus}`;
     }
 
     try {
@@ -95,26 +99,60 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
   };
 
   // Handle page change when navigating between pages
-  const handleChangePage = (event: unknown, newPage: number) => {
+  const handleChangePage = (event: any, newPage: number) => {
     setPage(newPage); // Update the current page
   };
 
   // Handle change in rows per page (pagination)
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10)); // Update rows per page
     setPage(0); // Reset to first page when rows per page change
   };
 
+  const handleStatusChange = (event: any) => {
+    const status = event.target.value
+    setSelectedStatus(status); // Update selected status
+  };
+
+  const toCamelCase = (status: string): string => {
+    return status
+      .toLowerCase() // Convert the entire string to lower case
+      .split(' ') // Split the string into words
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+      .join(''); // Join the words together
+  };
+
   return (
     <div>
-      <div style={{ padding: '2rem' }}>
+      <div className='phrase-title'>
         {/* Page title */}
         <Typography variant="h4" gutterBottom>
           Phrase Details
         </Typography>
-        
+
         {/* Search input section */}
         <div className="top-section">
+          {/* Dropdown to select the language for translation */}
+          <div>
+            <FormControl variant="outlined" className='dropdown-box'>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={selectedStatus || ""} // Use empty string if selectedStatus is null
+                onChange={(e: any) => {
+                  handleStatusChange(e);
+                  setPage(0); // Reset page on status change
+                  getphrases(); // Re-fetch data based on the new status
+                }}
+                label="Status"
+                style={{ height: 46 }}
+              >
+                <MenuItem value="ACTIVE">Active</MenuItem>
+                <MenuItem value="PENDING">Pending</MenuItem>
+                <MenuItem value="SPAM">Spam</MenuItem>
+                <MenuItem value="DELETED">Deleted</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
           <div className="search-box">
             <IconButton type="button" aria-label="search">
               <SearchIcon />
@@ -134,9 +172,6 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
             <Table className="table" stickyHeader>
               <TableHead className="table-head">
                 <TableRow className="table-tr">
-                  <TableCell className="table-th">
-                    <ListItemText className="item-title">ID</ListItemText>
-                  </TableCell>
                   <TableCell className="table-th">
                     <ListItemText className="item-title">Phrase
                       {/* Icon button to trigger sorting by phrase */}
@@ -168,22 +203,37 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
 
               {/* Table body to display phrases */}
               <TableBody>
-                {phrases.map((data) => {
-                  return (
-                    <TableRow key={data.uuid}>
-                      <TableCell>{data.uuid}</TableCell>
-                      <TableCell>{data.phrase}</TableCell>
-                      <TableCell>{data.status}</TableCell>
-                      <TableCell>{formatDate(data.updated_at)}</TableCell>
-                      <TableCell className="table-td">
-                        {/* Button to navigate to phrase details */}
-                        <Button onClick={() => router.push(`/phrase-details?id=${data.uuid}`)}>
-                          View
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
+                {phrases.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      No data found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  phrases.map((data) => {
+                    return (
+                      <TableRow key={data.uuid}>
+                        <TableCell>{data.phrase}</TableCell>
+                        <TableCell>{toCamelCase(data.status)}</TableCell>
+                        <TableCell>{formatDate(data.updated_at)}</TableCell>
+                        <TableCell >
+                          {/* Button to navigate to phrase details */}
+                          <Button
+                            sx={{
+                              color: 'black',
+                              border: '1px solid black',
+                              borderRadius: '8px',
+                              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.2)',
+                            }}
+                            onClick={() => router.push(`/phrase-details?id=${data.uuid}`)}>
+                            {/* View Details */}
+                            Translate
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                )}
               </TableBody>
 
               {/* Table footer with pagination */}

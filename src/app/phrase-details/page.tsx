@@ -53,7 +53,13 @@ const Page = () => {
             getNewLanguage(uuid, selectedLanguage.language_code) // Fetch the translation for the selected language
         }
     };
-
+    const toCamelCase = (status: string): string => {
+        return status
+          .toLowerCase() // Convert the entire string to lower case
+          .split(' ') // Split the string into words
+          .map(word => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word
+          .join(''); // Join the words together
+      };
     // Function to fetch the translated phrase in the selected language
     const getNewLanguage = async (id: any, code: any) => {
         try {
@@ -92,7 +98,7 @@ const Page = () => {
                                 {/* Display the status of the phrase */}
                                 <div className="details-description ">Status:
                                     <span className='details-title'>
-                                        {phraseDetail?.status ? phraseDetail?.status : "-"}
+                                        {phraseDetail?.status ? toCamelCase(phraseDetail?.status) : "-"}
                                     </span>
                                 </div>
                             </div>
@@ -100,9 +106,9 @@ const Page = () => {
                             <div className="card-details">
                                 {/* Dropdown to select the language for translation */}
                                 <div className="details-description">Translate To:
-                                    <FormControl variant="outlined" style={{ minWidth: 150 }}>
+                                    <FormControl variant="outlined" style={{ minWidth:150,padding:4}}>
                                         <InputLabel>Languages</InputLabel>
-                                        <Select
+                                        <Select style={{height:46}}
                                             value={selectedLanguageCode} // Bind to selected language code
                                             onChange={handleLanguageChange} // Handle language change
                                             label="Language">
@@ -130,7 +136,7 @@ const Page = () => {
                                 <div className="card-details">
                                     {/* Display the translated phrase */}
                                     <div className="details-description">Translated phrase:
-                                        <span className='details-title'>{newLanguage?.translation ? newLanguage.translation : ' '}</span>
+                                        <span className='details-title'>{newLanguage?.translation ? newLanguage.translation : ' - '}</span>
                                     </div>
                                 </div>
                             </div>

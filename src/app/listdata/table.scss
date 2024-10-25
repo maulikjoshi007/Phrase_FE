@@ -44,11 +44,20 @@
     }
   }
 }
+.phrase-title{
+  text-align: center;
+  padding: 2rem;
+}
 .top-section {
   display: flex;
+  gap: 20px;
   align-items: center;
   justify-content: end;
   margin: 0.8rem 0rem 1.8rem;
+  .dropdown-box{
+    min-width:100px;
+    padding: 4px;
+  }
   .search-box {
     width: 20%;
     border-radius: 0.5rem;

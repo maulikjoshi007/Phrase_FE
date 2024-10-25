@@ -214,7 +214,11 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
                     return (
                       <TableRow key={data.uuid}>
                         <TableCell>{data.phrase}</TableCell>
-                        <TableCell>{toCamelCase(data.status)}</TableCell>
+                        <TableCell >
+                          <Button className = {`status-btn status-${data.status}`}>
+                            {toCamelCase(data.status)}
+                            </Button>
+                            </TableCell>
                         <TableCell>{formatDate(data.updated_at)}</TableCell>
                         <TableCell >
                           {/* Button to navigate to phrase details */}

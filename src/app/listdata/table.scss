@@ -8,6 +8,36 @@
     max-height: calc(100vh - 18.4rem);
     border-radius: 0.5rem;
     .table {
+      .status-btn {
+        &.status-ACTIVE {
+          background: rgba(0, 204, 105, 0.05);
+          color: #00cc69;
+          border-radius: 0.3rem;
+          box-shadow: unset;
+          padding: 0.313rem 0.625rem;
+        }
+        &.status-PENDING {
+          background: rgba(255, 148, 84, 0.05);
+          color: #ff9454;
+          border-radius: 0.3rem;
+          box-shadow: unset;
+          padding: 0.313rem 0.625rem;
+        }
+        &.status-SPAM {
+          background: rgb(216, 222, 224);
+          color: gray;
+          border-radius: 0.3rem;
+          box-shadow: unset;
+          padding: 0.313rem 0.625rem;
+        }
+        &.status-DELETED {
+          background: rgba(241, 67, 68, 0.05);
+          color: #f14344;
+          border-radius: 0.3rem;
+          box-shadow: unset;
+          padding: 0.313rem 0.625rem;
+        }
+      }
       .table-head {
         .table-tr {
           .table-th {

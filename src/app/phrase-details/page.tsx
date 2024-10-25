@@ -14,11 +14,7 @@ const Page = () => {
     const searchParams = useSearchParams() // Used to get the query parameters from the URL
     const [newLanguageName, setNewLanguageName] = useState<any>() // State to store the selected language name
     const uuid = searchParams.get('id') // Get the 'id' parameter from the URL query
-    console.log(uuid, "id"); // For debugging, shows the UUID in the console
-    console.log(selectedLanguageCode, "selectedLanguageCode");
 
-    // useEffect runs when the component is loaded. 
-    // It will fetch phrase details and the available languages.
     useEffect(() => {
         getPhraseDetail() // Fetch phrase details
         getLanguages() // Fetch available languages

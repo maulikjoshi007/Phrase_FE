@@ -38,7 +38,6 @@
             font-weight: 400;
             line-height: normal;
             color: #a4a4a4;
-            // white-space: nowrap;
           }
           .details-description {
             font-size: 1.13rem;
@@ -61,4 +60,11 @@
       }
     }
   }
+}
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
 }

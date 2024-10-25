@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, ListItemText, Paper, TableContainer, InputBase, IconButton, TableFooter, TablePagination, Icon, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow, Typography, ListItemText, Paper, TableContainer, InputBase, IconButton, TableFooter, TablePagination, Icon, FormControl, InputLabel, Select, MenuItem, Backdrop, CircularProgress } from '@mui/material';
 import { datalist } from './modal'; // Importing the datalist interface
 import './table.scss'; // Importing custom styles for the table
 import SearchIcon from '@mui/icons-material/Search'; // Importing the search icon
@@ -19,7 +19,7 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
   const [rowsPerPage, setRowsPerPage] = useState(2); // State to limit the number of phrases displayed per page
   const [totalPhrases, setTotalPhrases] = useState(0); // State to store the total number of phrases for pagination
   const [selectedStatus, setSelectedStatus] = useState<any>()
-
+const[isLoading,setisLoading]=useState<boolean>(false)
   // Effect to fetch phrases whenever filter, page, rowsPerPage, order, or orderBy changes
   useEffect(() => {
     getphrases();
@@ -70,11 +70,14 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
     }
 
     try {
+      setisLoading(true)
       const res = await fetch(url); // Fetch phrases from the API
       const data = await res.json(); // Parse JSON response
       setPhrases(data.data); // Set fetched phrases in state
+      setisLoading(false)
       setTotalPhrases(data.totalRows); // Set total phrases for pagination
     } catch (error) {
+      setisLoading(false)
       console.error("Error fetching data:", error); // Handle error if API call fails
     }
   };
@@ -258,7 +261,14 @@ const Listpage: React.FC<datalist> = ({ uuid }) => {
             </Table>
           </TableContainer>
         </Paper>
+
       </div>
+      <Backdrop
+        sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={isLoading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </div>
   );
 };

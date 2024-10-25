@@ -3,12 +3,17 @@
 To run this project locally, follow these steps:
 
 ### Clone the repository:
-bash
+
+```bash
 git clone https://github.com/maulikjoshi007/Phrase_FE.git
 cd Phrase_FE 
+```
 ### Install dependencies:
-bash
+
+```bash
 npm install 
+```
+
 ### Set up environment variables:
 
 Create a `.env.local` file in the root of your project and add the following environment variables:
@@ -22,8 +27,11 @@ Copy code
 Replace `<your-api-base-url>` with the actual base URL of your API.
 
 ### Run the development server:
-bash
+
+```bash
 npm run dev 
+```
+
 Open [http://localhost:3000/](http://localhost:3000/) in your browser to see the app.
 
 ## Environment Variables
